@@ -1,4 +1,5 @@
-﻿using Assets._Project.Develop.Runtime.Utilities.AssetsManagment;
+﻿using Assets._Project.Develop.Runtime.Configs;
+using Assets._Project.Develop.Runtime.Utilities.AssetsManagment;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,7 +13,8 @@ namespace Assets._Project.Develop.Runtime.Utilities.ConfigsManagment
 
         private readonly Dictionary<Type, string> _configsPaths = new Dictionary<Type, string>()
         {
-            
+            { typeof(SequenceAlphabetConfig), "Configs/SequenceAlphabetConfig"},
+            { typeof(SequenceNumbersConfig), "Configs/SequenceNumbersConfig"}
         };
 
         public ResourcesConfigsLoader(ResourcesAssetsLoader resources) => _resources = resources;

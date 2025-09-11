@@ -46,7 +46,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructer
         {
             Debug.Log($"You Loose! You pressed {pressedKey}, its wrong input. Press {RestartKeyCode} to restart game");
             GameEnded();
-            _coroutinesPerformer.StartPerform(SwitchSceneAfterPressedKey(Scenes.GameplayScene, new GameplayInputArgs(_sequenceGenerator.InputGameplayArgs.SequenceType)));
+            _coroutinesPerformer.StartPerform(SwitchSceneAfterPressedKey(Scenes.GameplayScene, new GameplayInputArgs(_sequenceGenerator.InputGameplayArgs.SequenceType, _sequenceGenerator.InputGameplayArgs.Symbols)));
         }
 
         private void GameEnded()

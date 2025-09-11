@@ -1,45 +1,28 @@
 ﻿using Assets._Project.Develop.Runtime.Gameplay.Infrastructer;
-using Assets._Project.Develop.Runtime.Utilities.SceneManagment;
-using System;
 using Random = UnityEngine.Random;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.Utilites
 {
     public class SequenceGenerator
     {
-        private const string Numbers = "0123456789";
-        private const string Chars = "qwertyuiopasdfghjklzxcvbnm";
-
         private const int MaxLenght = 10;
         private const int MinLenght = 3;
 
         public GameplayInputArgs InputGameplayArgs {  get; private set; }
 
-        public void Initialize(GameplayInputArgs inputGameplayArgs) => InputGameplayArgs = inputGameplayArgs;
-
-        public string GetSequenceBy(Sequences sequencesType)
+        public void Initialize(GameplayInputArgs inputGameplayArgs)
         {
-            switch (sequencesType)
-            {
-                case Sequences.Numbers:
-                    return GenerateSequence(Numbers);
-
-                case Sequences.Alphabet:
-                    return GenerateSequence(Chars);
-
-                default:
-                    throw new InvalidOperationException($"{sequencesType} not exist");
-            }
+            InputGameplayArgs = inputGameplayArgs;
         }
 
-        private string GenerateSequence(string symbols)
+        public string GenerateSequence()
         {
             string sequence = "";
             int randomLenght = Random.Range(MinLenght, MaxLenght);
 
             while (randomLenght > 0)
             {
-                sequence += symbols[Random.Range(0, symbols.Length)];
+                sequence += InputGameplayArgs.Symbols[Random.Range(0, InputGameplayArgs.Symbols.Length)];
                 randomLenght--;
             }
 

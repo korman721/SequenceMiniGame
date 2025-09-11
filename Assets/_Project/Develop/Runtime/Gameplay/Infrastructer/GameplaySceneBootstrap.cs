@@ -29,7 +29,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructer
         {
             SequenceGenerator sequenceGenerator = _container.Resolve<SequenceGenerator>();
             sequenceGenerator.Initialize(_gameplaySceneArgs);
-            string sequence = sequenceGenerator.GetSequenceBy(_gameplaySceneArgs.SequenceType);
+            string sequence = sequenceGenerator.GenerateSequence();
 
             Debug.Log($"Sequence Type: {_gameplaySceneArgs.SequenceType}");
 
