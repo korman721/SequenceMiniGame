@@ -19,7 +19,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Utilites
 
         public void Dispose() => _playerInput.KeyDown -= OnKeyDown;
 
-        public void ThrowSequence(string sequence)
+        public void Initialize(string sequence)
         {
             _sequence = sequence;
             Debug.Log(_sequence);

@@ -15,13 +15,14 @@ namespace Assets._Project.Develop.Runtime.Infrastructer.DI
 
         public DIContainer(DIContainer parent) => _parent = parent;
 
-        public void RegisterAsSingle<T>(Func<DIContainer, T> creator)
+        public Registration RegisterAsSingle<T>(Func<DIContainer, T> creator)
         {
             if (IsAlreadyRegister<T>())
                 throw new InvalidOperationException($"{typeof(T)} is already register");
 
             Registration registration = new Registration(container => creator.Invoke(container));
             _typeRegistration.Add(typeof(T), registration);
+            return registration;
         }
 
         public bool IsAlreadyRegister<T>()
@@ -56,6 +57,13 @@ namespace Assets._Project.Develop.Runtime.Infrastructer.DI
             }
 
             throw new InvalidOperationException($"Registration for {typeof(T)} not exists");
+        }
+
+        public void Initialize()
+        {
+            foreach (KeyValuePair<Type, Registration> registrations in _typeRegistration)
+                if (registrations.Value.IsNonLazy)
+                    registrations.Value.CreateInstanceFrom(this);
         }
     }
 }

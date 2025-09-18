@@ -1,9 +1,20 @@
 ﻿using Assets._Project.Develop.Runtime.Infrastructer.DI;
+using Assets._Project.Develop.Runtime.Meta.Wallet;
 using Assets._Project.Develop.Runtime.Utilities.AssetsManagment;
 using Assets._Project.Develop.Runtime.Utilities.ConfigsManagment;
 using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagment;
+using Assets._Project.Develop.Runtime.Utilities.DataManagment;
+using Assets._Project.Develop.Runtime.Utilities.DataManagment.DataKeysStorage;
+using Assets._Project.Develop.Runtime.Utilities.DataManagment.DataProvider;
+using Assets._Project.Develop.Runtime.Utilities.DataManagment.DataRepository;
+using Assets._Project.Develop.Runtime.Utilities.DataManagment.Serializers;
+using Assets._Project.Develop.Runtime.Utilities.GamesManagment.GamesCounterService;
 using Assets._Project.Develop.Runtime.Utilities.LoadingScreen;
+using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagment;
+using System;
+using System.Collections.Generic;
+using UnityEngine;
 using Object = UnityEngine.Object;
 
 namespace Assets._Project.Develop.Runtime.Infrastructer.GameEntryPoint
@@ -18,6 +29,38 @@ namespace Assets._Project.Develop.Runtime.Infrastructer.GameEntryPoint
             container.RegisterAsSingle<ILoadingScreen>(CreateLoadingScreen);
             container.RegisterAsSingle(CreateSceneLoaderService);
             container.RegisterAsSingle(CreateSceneSwitcherService);
+            container.RegisterAsSingle<ISaveLoadService>(CreateSaveLoadService);
+            container.RegisterAsSingle(CreatePlayerDataProvider);
+            container.RegisterAsSingle(CreateWallet).NonLazy();
+            container.RegisterAsSingle<IGamesCounter>(CreateGamesCounterService).NonLazy();
+        }
+
+        private static GamesCounterService CreateGamesCounterService(DIContainer container)
+            => new GamesCounterService(container.Resolve<PlayerDataProvider>());
+
+        private static PlayerDataProvider CreatePlayerDataProvider(DIContainer container)
+            => new PlayerDataProvider(container.Resolve<ISaveLoadService>(), container.Resolve<ConfigsProviderService>());
+
+        private static SaveLoadService CreateSaveLoadService(DIContainer container)
+        {
+            IDataSerializer dataSerializer = new JsonSerializer();
+            IDataKeyStorage dataKeysStorage = new MapDataKeyStorage();
+
+            string saveFolderPath = Application.isEditor ? Application.dataPath : Application.persistentDataPath;
+
+            IDataRepository dataRepository = new LocalDataRepository(saveFolderPath, "json");
+
+            return new SaveLoadService(dataSerializer, dataKeysStorage, dataRepository);
+        }
+
+        private static WalletService CreateWallet(DIContainer container)
+        {
+            Dictionary<CurrencyTypes, ReactiveVariable<int>> currencies = new Dictionary<CurrencyTypes, ReactiveVariable<int>>();
+
+            foreach (CurrencyTypes type in Enum.GetValues(typeof(CurrencyTypes)))
+                currencies[type] = new ReactiveVariable<int>();
+
+            return new WalletService(currencies, container.Resolve<PlayerDataProvider>());
         }
 
         private static SceneSwitcherService CreateSceneSwitcherService(DIContainer container)

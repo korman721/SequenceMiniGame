@@ -14,6 +14,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructer
         public override void SceneContextRegistrations(DIContainer container, IInputSceneArgs sceneArgs = null)
         {
             GameplayContextRegistrations.Process(container);
+            container.Initialize();
             _container = container;
 
             if (sceneArgs is GameplayInputArgs gameplayInputArgs)
@@ -33,9 +34,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructer
 
             Debug.Log($"Sequence Type: {_gameplaySceneArgs.SequenceType}");
 
-            _container.Resolve<SequenceChecker>().ThrowSequence(sequence);
-
-            _container.Resolve<GameplayCycle>();
+            _container.Resolve<SequenceChecker>().Initialize(sequence);
         }
     }
 }

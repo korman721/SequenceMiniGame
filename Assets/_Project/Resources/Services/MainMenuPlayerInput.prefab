@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5201863751018665678}
-  - component: {fileID: 2813903673974547702}
+  - component: {fileID: 8665177386005524241}
   m_Layer: 0
-  m_Name: SequenceChoiceService
+  m_Name: MainMenuPlayerInput
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,7 +32,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2813903673974547702
+--- !u!114 &8665177386005524241
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,6 +41,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 1233392253521518885}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e11e3da297d505942875341b8a9d8a73, type: 3}
+  m_Script: {fileID: 11500000, guid: 5c6a8268cb13746469d35a57e10727d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

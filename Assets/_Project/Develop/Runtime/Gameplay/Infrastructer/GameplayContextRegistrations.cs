@@ -1,9 +1,12 @@
 ﻿using Assets._Project.Develop.Runtime.Gameplay.Utilites;
 using Assets._Project.Develop.Runtime.Infrastructer.DI;
+using Assets._Project.Develop.Runtime.Meta.Wallet;
 using Assets._Project.Develop.Runtime.Utilities.AssetsManagment;
+using Assets._Project.Develop.Runtime.Utilities.ConfigsManagment;
 using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagment;
+using Assets._Project.Develop.Runtime.Utilities.DataManagment.DataProvider;
+using Assets._Project.Develop.Runtime.Utilities.GamesManagment.GamesCounterService;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagment;
-using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructer
@@ -15,7 +18,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructer
             container.RegisterAsSingle(CreateSequenceGenerator);
             container.RegisterAsSingle(CreatePlayerInput);
             container.RegisterAsSingle(CreateSequenceChecker);
-            container.RegisterAsSingle(CreateGameplayCycle);
+            container.RegisterAsSingle(CreateGameplayCycle).NonLazy();
         }
 
         private static SequenceGenerator CreateSequenceGenerator(DIContainer container)
@@ -38,6 +41,10 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructer
                 container.Resolve<SequenceChecker>(),
                 container.Resolve<SceneSwitcherService>(),
                 container.Resolve<ICoroutinesPerformer>(),
-                container.Resolve<SequenceGenerator>());
+                container.Resolve<SequenceGenerator>(),
+                container.Resolve<IGamesCounter>(),
+                container.Resolve<WalletService>(),
+                container.Resolve<ConfigsProviderService>(),
+                container.Resolve<PlayerDataProvider>());
     }
 }
