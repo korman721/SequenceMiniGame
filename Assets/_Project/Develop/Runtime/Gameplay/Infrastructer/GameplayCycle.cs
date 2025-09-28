@@ -46,6 +46,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructer
             _walletService = walletService;
             _lossesVictoriesSettingsConfig = configProviderService.Get<LossesVictoriesSettingsConfig>();
             _playerDataProvider = playerDataProvider;
+
             _sequenceChecker.WrongInput += OnWrongInput;
             _sequenceChecker.SequenceEnded += OnSequenceEnded;
 

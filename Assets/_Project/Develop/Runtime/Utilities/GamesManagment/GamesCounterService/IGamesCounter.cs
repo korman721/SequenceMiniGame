@@ -1,11 +1,13 @@
-﻿namespace Assets._Project.Develop.Runtime.Utilities.GamesManagment.GamesCounterService
+﻿using Assets._Project.Develop.Runtime.Utilities.Reactive;
+
+namespace Assets._Project.Develop.Runtime.Utilities.GamesManagment.GamesCounterService
 {
     public interface IGamesCounter
     {
         void Victory();
         void Loss();
         void Reset();
-        int Victories { get; }
-        int Losses { get; }
+        IReadonlyVariable<int> Victories { get; }
+        IReadonlyVariable<int> Losses { get; }
     }
 }

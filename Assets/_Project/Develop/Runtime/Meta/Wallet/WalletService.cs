@@ -2,7 +2,9 @@
 using Assets._Project.Develop.Runtime.Utilities.DataManagment.DataProvider;
 using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Assets._Project.Develop.Runtime.Meta.Wallet
 {
@@ -20,6 +22,8 @@ namespace Assets._Project.Develop.Runtime.Meta.Wallet
         }
 
         public IReadonlyVariable<int> GetCurrnecy(CurrencyTypes currencyType) => _currencies[currencyType];
+
+        public IEnumerable<CurrencyTypes> CurrencyTypes => _currencies.Keys;
 
         public void Add(CurrencyTypes currency, int value)
         {

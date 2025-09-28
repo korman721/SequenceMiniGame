@@ -1,6 +1,9 @@
 ﻿using Assets._Project.Develop.Runtime.Gameplay.Utilites;
 using Assets._Project.Develop.Runtime.Infrastructer.DI;
 using Assets._Project.Develop.Runtime.Meta.Wallet;
+using Assets._Project.Develop.Runtime.UI.Core;
+using Assets._Project.Develop.Runtime.UI.Gameplay;
+using Assets._Project.Develop.Runtime.UI.MainMenu;
 using Assets._Project.Develop.Runtime.Utilities.AssetsManagment;
 using Assets._Project.Develop.Runtime.Utilities.ConfigsManagment;
 using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagment;
@@ -19,6 +22,33 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructer
             container.RegisterAsSingle(CreatePlayerInput);
             container.RegisterAsSingle(CreateSequenceChecker);
             container.RegisterAsSingle(CreateGameplayCycle).NonLazy();
+            container.RegisterAsSingle(CreateGameplayUIRoot);
+            container.RegisterAsSingle(CreateGameplayPresentersFactory);
+            container.RegisterAsSingle(CreateGameplayScreenPresenter).NonLazy();
+        }
+
+        private static GameplayPresentersFactory CreateGameplayPresentersFactory(DIContainer container) =>
+            new GameplayPresentersFactory(container); 
+
+        private static GameplayUIRoot CreateGameplayUIRoot(DIContainer container)
+        {
+            ResourcesAssetsLoader resourcesAssetsLoader = container.Resolve<ResourcesAssetsLoader>();
+
+            GameplayUIRoot gameplayUIRootPrefab = resourcesAssetsLoader.Load<GameplayUIRoot>("UI/Gameplay/GameplayUIRoot");
+
+            return Object.Instantiate(gameplayUIRootPrefab);
+        }
+
+        private static GameplayScreenPresenter CreateGameplayScreenPresenter(DIContainer container)
+        {
+            GameplayUIRoot gameplayUIRoot = container.Resolve<GameplayUIRoot>();
+
+            GameplayScreenView view = container.Resolve<ViewsFactory>()
+                .CreateView<GameplayScreenView>(ViewID.GameplayScreenView, gameplayUIRoot.HUDLayer);
+
+            GameplayScreenPresenter presenter = container.Resolve<GameplayPresentersFactory>().CreateGameplayScreenPresenter(view);
+
+            return presenter;
         }
 
         private static SequenceGenerator CreateSequenceGenerator(DIContainer container)

@@ -1,5 +1,6 @@
 ﻿using Assets._Project.Develop.Runtime.Configs;
 using Assets._Project.Develop.Runtime.Configs.Meta;
+using Assets._Project.Develop.Runtime.Configs.UI;
 using Assets._Project.Develop.Runtime.Utilities.AssetsManagment;
 using System;
 using System.Collections;
@@ -17,7 +18,8 @@ namespace Assets._Project.Develop.Runtime.Utilities.ConfigsManagment
             { typeof(SequenceAlphabetConfig), "Configs/Gameplay/SequenceAlphabetConfig"},
             { typeof(SequenceNumbersConfig), "Configs/Gameplay/SequenceNumbersConfig"},
             { typeof(StartWalletConfig), "Configs/Meta/StartWalletConfig"},
-            { typeof(LossesVictoriesSettingsConfig), "Configs/Meta/LossesVictoriesSettingsConfig"}
+            { typeof(LossesVictoriesSettingsConfig), "Configs/Meta/LossesVictoriesSettingsConfig"},
+            { typeof(CurrencySpritesConfig), "Configs/UI/CurrencySpritesConfig"}
         };
 
         public ResourcesConfigsLoader(ResourcesAssetsLoader resources) => _resources = resources;

@@ -1,5 +1,7 @@
 ﻿using Assets._Project.Develop.Runtime.Infrastructer.DI;
 using Assets._Project.Develop.Runtime.Meta.Wallet;
+using Assets._Project.Develop.Runtime.UI;
+using Assets._Project.Develop.Runtime.UI.Core;
 using Assets._Project.Develop.Runtime.Utilities.AssetsManagment;
 using Assets._Project.Develop.Runtime.Utilities.ConfigsManagment;
 using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagment;
@@ -33,7 +35,15 @@ namespace Assets._Project.Develop.Runtime.Infrastructer.GameEntryPoint
             container.RegisterAsSingle(CreatePlayerDataProvider);
             container.RegisterAsSingle(CreateWallet).NonLazy();
             container.RegisterAsSingle<IGamesCounter>(CreateGamesCounterService).NonLazy();
+            container.RegisterAsSingle(CreateViewsFactory);
+            container.RegisterAsSingle(CreateProjectPresentersFactory);
         }
+
+        private static ViewsFactory CreateViewsFactory(DIContainer c)
+            => new ViewsFactory(c.Resolve<ResourcesAssetsLoader>());
+
+        private static ProjectPresentersFactory CreateProjectPresentersFactory(DIContainer c)
+            => new ProjectPresentersFactory(c);
 
         private static GamesCounterService CreateGamesCounterService(DIContainer container)
             => new GamesCounterService(container.Resolve<PlayerDataProvider>());

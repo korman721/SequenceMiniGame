@@ -5,10 +5,12 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Utilites
 {
     public class SequenceChecker : IDisposable
     {
+        public event Action<string> SequenceInitialized;
         public event Action SequenceEnded;
         public event Action<KeyCode> WrongInput;
 
         private PlayerInput _playerInput;
+
         private string _sequence;
 
         public SequenceChecker(PlayerInput playerInput)
@@ -22,7 +24,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Utilites
         public void Initialize(string sequence)
         {
             _sequence = sequence;
-            Debug.Log(_sequence);
+            SequenceInitialized?.Invoke(_sequence);
         }
 
         private void OnKeyDown(KeyCode key)

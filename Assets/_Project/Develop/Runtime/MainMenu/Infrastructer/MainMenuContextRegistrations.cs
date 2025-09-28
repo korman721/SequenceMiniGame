@@ -1,5 +1,7 @@
 ﻿using Assets._Project.Develop.Runtime.Infrastructer.DI;
 using Assets._Project.Develop.Runtime.Meta.Wallet;
+using Assets._Project.Develop.Runtime.UI.Core;
+using Assets._Project.Develop.Runtime.UI.MainMenu;
 using Assets._Project.Develop.Runtime.Utilities.AssetsManagment;
 using Assets._Project.Develop.Runtime.Utilities.ConfigsManagment;
 using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagment;
@@ -16,6 +18,9 @@ namespace Assets._Project.Develop.Runtime.MainMenu.Infrastructer
         public static void Process(DIContainer container)
         {
             container.RegisterAsSingle(CreateSequenceChoiceService).NonLazy();
+            container.RegisterAsSingle(CreateMainMenuPresentersFactory);
+            container.RegisterAsSingle(CreateMainMenuUIRoot);
+            container.RegisterAsSingle(CreateMainMenuScreenPresenter).NonLazy();
         }
 
         private static MainMenuPlayerInput CreateSequenceChoiceService(DIContainer container)
@@ -34,6 +39,31 @@ namespace Assets._Project.Develop.Runtime.MainMenu.Infrastructer
                 container.Resolve<PlayerDataProvider>());
 
             return sequenceChoiceService;
+        }
+
+        private static MainMenuPresentersFactory CreateMainMenuPresentersFactory(DIContainer container)
+            => new MainMenuPresentersFactory(container);
+
+        private static MainMenuUIRoot CreateMainMenuUIRoot(DIContainer container)
+        {
+            ResourcesAssetsLoader resourcesAssetsLoader = container.Resolve<ResourcesAssetsLoader>();
+
+            MainMenuUIRoot mainMenuUIRootPrefab = resourcesAssetsLoader.Load<MainMenuUIRoot>("UI/Meta/MainMenuUIRoot");
+
+            return Object.Instantiate(mainMenuUIRootPrefab);
+        }
+
+        private static MainMenuScreenPresenter CreateMainMenuScreenPresenter(DIContainer container)
+        {
+            MainMenuUIRoot mainMenuUIRoot = container.Resolve<MainMenuUIRoot>();
+
+            MainMenuScreenView mainMenuScreenView = container.Resolve<ViewsFactory>()
+                .CreateView<MainMenuScreenView>(ViewID.MainMenuScreenView, mainMenuUIRoot.HUDLayer);
+
+            MainMenuScreenPresenter mainMenuScreenPresenter = container.Resolve<MainMenuPresentersFactory>()
+                .CreateMainMenuPresenter(mainMenuScreenView);
+
+            return mainMenuScreenPresenter;
         }
     }
 }

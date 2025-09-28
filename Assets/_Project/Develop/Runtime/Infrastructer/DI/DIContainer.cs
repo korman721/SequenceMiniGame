@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Assets._Project.Develop.Runtime.Infrastructer.DI
 {
@@ -61,9 +62,19 @@ namespace Assets._Project.Develop.Runtime.Infrastructer.DI
 
         public void Initialize()
         {
-            foreach (KeyValuePair<Type, Registration> registrations in _typeRegistration)
-                if (registrations.Value.IsNonLazy)
-                    registrations.Value.CreateInstanceFrom(this);
+            foreach (Registration registration in _typeRegistration.Values)
+            {
+                if (registration.IsNonLazy)
+                    registration.CreateInstanceFrom(this);
+
+                registration.OnInitialize();
+            }
+        }
+
+        public void Dispose()
+        {
+            foreach (Registration registration in _typeRegistration.Values)
+                registration.OnDispose();
         }
     }
 }
